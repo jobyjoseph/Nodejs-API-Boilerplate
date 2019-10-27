@@ -65,6 +65,22 @@ app.put("/api/genres/:id", (req, res) => {
   res.send(genre);
 });
 
+/*==== Delete genre ====*/
+app.delete("/api/genres/:id", (req, res) => {
+  const genre = genres.find((g) => {
+    return g.id === parseInt(req.params.id)
+  });
+
+  // Invalid id
+  if(!genre)
+    return res.status(404).send("Invalid id");
+
+  const index = genres.indexOf(genre);
+  genres.splice(index, 1);
+
+  res.send(genre);
+});
+
 
 /*==== Validate genre ====*/
 function validateGenre(genre) {
