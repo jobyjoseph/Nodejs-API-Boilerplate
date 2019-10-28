@@ -1,8 +1,27 @@
+const config = require("config");
 const Joi = require("joi");
 const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const logger = require("./logger");
+const auth = require("./auth");
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static("public"));
+app.use(helmet());
+
+console.log(config.get("mail.host"));
+
+if(app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("Morgan enabled.");
+}
+
+app.use(logger);
+
+app.use(auth);
 
 const courses = [
   { id: 1, name: "course1" },
@@ -25,6 +44,8 @@ app.get("/api/courses/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
+
+  console.log(req.body);
 
   const { error } = validateCourse(req.body);
   if (error)

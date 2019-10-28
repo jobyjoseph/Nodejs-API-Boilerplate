@@ -1,0 +1,6 @@
+{
+  "name": "App config - production",
+  "mail": {
+    "host": "mail-prod-server"
+  }
+}
